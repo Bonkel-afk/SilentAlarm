@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Start Server & Client",
+      "configurations": ["Start Server", "Start Client"]
+    }
+  ],
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start Server",
+      "cwd": "${workspaceFolder}/server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Start Client",
+      "cwd": "${workspaceFolder}/client",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/client/src"
+    }
+  ]
+}

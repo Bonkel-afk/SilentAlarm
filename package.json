@@ -1,0 +1,13 @@
+{
+  "name": "silentuncle",
+  "private": true,
+  "scripts": {
+  "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+  "electron": "electron ."
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "electron": "^40.7.0",
+    "electron-builder": "^26.8.1"
+  }
+}
