@@ -13,7 +13,7 @@ const server = http.createServer(app)
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 })
@@ -30,14 +30,16 @@ io.on("connection", (socket) => {
   socket.on("user:join", (username) => {
     connectedUsers.set(socket.id, username)
     broadcastUserList()
-    // Send all current alarms to the joining client
     socket.emit("alarm:sync", Array.from(alarms.values()))
   })
 
   socket.on("alarm:create", (data) => {
     const alarm: Alarm = {
       id: Date.now().toString(),
-      ...data,
+      typeId: data.typeId,
+      userId: data.userId,
+      roomId: data.roomId,
+      notes: data.notes,
       status: "ACTIVE",
       createdAt: new Date().toISOString(),
       acknowledgedBy: [],
@@ -50,12 +52,26 @@ io.on("connection", (socket) => {
     const alarm = alarms.get(alarmId)
     const username = connectedUsers.get(socket.id)
     if (!alarm || !username) return
+    if (alarm.status === "CLOSED") return
     if (alarm.acknowledgedBy.includes(username)) return
 
     alarm.acknowledgedBy.push(username)
     if (alarm.status === "ACTIVE") {
       alarm.status = "ACKNOWLEDGED"
     }
+
+    io.emit("alarm:update", alarm)
+  })
+
+  socket.on("alarm:close", (alarmId) => {
+    const alarm = alarms.get(alarmId)
+    const username = connectedUsers.get(socket.id)
+    if (!alarm || !username) return
+    if (alarm.status === "CLOSED") return
+
+    alarm.status = "CLOSED"
+    alarm.closedBy = username
+    alarm.closedAt = new Date().toISOString()
 
     io.emit("alarm:update", alarm)
   })

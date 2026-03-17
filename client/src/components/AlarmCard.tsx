@@ -70,10 +70,16 @@ const Icons = {
       <polyline points="22 4 12 14.01 9 11.01" />
     </svg>
   ),
-  clock2: (
+  clockPending: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
+    </svg>
+  ),
+  x: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
   ),
 }
@@ -92,13 +98,24 @@ export function AlarmCard({ alarm, connectedUsers }: AlarmCardProps) {
 
   const isSender = alarm.userId === session.username
   const hasAcked = alarm.acknowledgedBy.includes(session.username)
-  const canAck = !isSender && !hasAcked && alarm.status !== "CLOSED"
+  const isClosed = alarm.status === "CLOSED"
+  const isAcknowledged = alarm.status === "ACKNOWLEDGED"
 
-  // Other users (everyone except sender) that we track for ack status
+  // Can acknowledge: not sender, hasn't acked, not closed
+  const canAck = !isSender && !hasAcked && !isClosed
+
+  // Can close: sender and not closed, OR any user when acknowledged
+  const canClose = !isClosed && (isSender || isAcknowledged)
+
+  // Other connected users (everyone except sender) for ack roster
   const respondents = connectedUsers.filter(u => u !== alarm.userId)
 
   const handleAck = () => {
     socket.emit("alarm:ack", alarm.id)
+  }
+
+  const handleClose = () => {
+    socket.emit("alarm:close", alarm.id)
   }
 
   return (
@@ -112,7 +129,7 @@ export function AlarmCard({ alarm, connectedUsers }: AlarmCardProps) {
 
       {/* Card body */}
       <div className="alarm-card-body">
-        {/* Top row: type + status + ack button */}
+        {/* Top row: type + status badge */}
         <div className="alarm-card-top">
           <div className="alarm-card-type">
             <span
@@ -125,25 +142,18 @@ export function AlarmCard({ alarm, connectedUsers }: AlarmCardProps) {
             </span>
           </div>
 
-          <div className="alarm-card-top-right">
-            {canAck && (
-              <button className="alarm-ack-btn" onClick={handleAck} type="button">
-                {Icons.check}
-                Bestätigen
-              </button>
-            )}
-            {!canAck && hasAcked && (
-              <span className="alarm-self-acked">
-                {Icons.checkCircle}
-                Bestätigt
-              </span>
-            )}
-            <span className={`status-badge status-badge--${sc}`}>
-              <span className="status-dot" />
-              {statusLabel(alarm.status)}
-            </span>
-          </div>
+          <span className={`status-badge status-badge--${sc}`}>
+            <span className="status-dot" />
+            {statusLabel(alarm.status)}
+          </span>
         </div>
+
+        {/* Notes callout */}
+        {alarm.notes && (
+          <div className="alarm-notes">
+            {alarm.notes}
+          </div>
+        )}
 
         {/* Metadata row */}
         <div className="alarm-card-meta">
@@ -163,8 +173,8 @@ export function AlarmCard({ alarm, connectedUsers }: AlarmCardProps) {
           </span>
         </div>
 
-        {/* Acknowledgment roster — shown when there are other users online */}
-        {respondents.length > 0 && (
+        {/* Acknowledgment roster */}
+        {respondents.length > 0 && !isClosed && (
           <div className="alarm-ack-section">
             <div className="alarm-ack-row">
               <span className="alarm-ack-label">Reagiert</span>
@@ -176,13 +186,42 @@ export function AlarmCard({ alarm, connectedUsers }: AlarmCardProps) {
                       key={user}
                       className={`ack-chip ${acked ? "ack-chip--confirmed" : "ack-chip--pending"}`}
                     >
-                      {acked ? Icons.checkCircle : Icons.clock2}
+                      {acked ? Icons.checkCircle : Icons.clockPending}
                       {user}
                     </span>
                   )
                 })}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Action buttons */}
+        {(!isClosed || alarm.closedBy) && (
+          <div className="alarm-actions">
+            {canAck && (
+              <button className="alarm-ack-btn" onClick={handleAck} type="button">
+                {Icons.check}
+                Best&auml;tigen
+              </button>
+            )}
+            {!canAck && hasAcked && !isClosed && (
+              <span className="alarm-self-acked">
+                {Icons.checkCircle}
+                Best&auml;tigt
+              </span>
+            )}
+            {canClose && (
+              <button className="alarm-close-btn" onClick={handleClose} type="button">
+                {Icons.x}
+                Schlie&szlig;en
+              </button>
+            )}
+            {isClosed && alarm.closedBy && (
+              <span className="alarm-closed-info">
+                Geschlossen von {alarm.closedBy}
+              </span>
+            )}
           </div>
         )}
       </div>

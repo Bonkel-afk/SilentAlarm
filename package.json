@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -n SERVER,CLIENT,ELECTRON -c yellow,cyan,green --kill-others \"npm run dev --prefix server\" \"npm run dev --prefix client\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "dev:nix": "nix-shell --run 'npm run dev'",
     "build": "npm run build --prefix client",
     "start": "electron .",
     "server": "npm run start --prefix server",

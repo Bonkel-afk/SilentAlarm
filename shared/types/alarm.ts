@@ -11,4 +11,7 @@ export interface Alarm {
   status: AlarmStatus
   createdAt: string
   acknowledgedBy: string[]
+  notes?: string
+  closedBy?: string
+  closedAt?: string
 }

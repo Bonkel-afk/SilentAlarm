@@ -12,7 +12,9 @@ export interface ClientToServerEvents {
     typeId: string
     userId: string
     roomId: string
+    notes?: string
   }) => void
   "alarm:ack": (alarmId: string) => void
+  "alarm:close": (alarmId: string) => void
   "user:join": (username: string) => void
 }
