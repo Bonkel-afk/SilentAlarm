@@ -1,42 +1,1021 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* ===================================================================
+   SilentAlarm — Component Styles
+   Layout, login, header, alarm cards, buttons, badges, animations
+   =================================================================== */
+
+/* --- Keyframe Animations --- */
+
+@keyframes pulse-active {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.4; }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes login-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- Login Screen --- */
+
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  padding: var(--space-6);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  animation: login-in 0.4s ease-out;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--color-active) 0%, #b91c1c 100%);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.login-logo svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.login-brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.login-subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.login-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.login-label-hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.login-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: var(--color-customer);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.login-input::placeholder {
+  color: var(--text-muted);
+}
+
+.login-input--readonly {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  cursor: default;
+}
+
+.login-btn {
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+  letter-spacing: 0.01em;
+}
+
+.login-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.login-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.login-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- App Layout --- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- Header --- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-8);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  -webkit-app-region: drag;
+  gap: var(--space-4);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-active) 0%, #b91c1c 100%);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.header-logo svg {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  -webkit-app-region: no-drag;
+}
+
+/* Header user info */
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+}
+
+.header-user-icon {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.header-user-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.header-user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-user-sep {
+  color: var(--text-muted);
+}
+
+.header-user-room {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Logout button */
+.logout-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: color var(--transition-base), background var(--transition-base), border-color var(--transition-base);
+}
+
+.logout-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.logout-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+}
+
+/* --- Connection Badge --- */
+
+.connection-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.connection-badge--connected {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.connection-badge--disconnected {
+  background: var(--color-active-bg);
+  color: var(--color-active);
+  border: 1px solid var(--color-active-border);
+}
+
+.connection-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.connection-badge--connected .connection-dot {
+  background: var(--color-success);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+}
+
+.connection-badge--disconnected .connection-dot {
+  background: var(--color-active);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* --- Main Content Layout --- */
+
+.main-content {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Sidebar: Alarm Triggers Panel --- */
+
+.triggers-panel {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow-y: auto;
+  height: calc(100vh - 57px);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.panel-header-icon {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.panel-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+/* --- Alarm Trigger Buttons --- */
+
+.alarm-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alarm-trigger-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  transition:
+    background var(--transition-base),
+    border-color var(--transition-base),
+    transform var(--transition-fast),
+    box-shadow var(--transition-base);
+  overflow: hidden;
+  -webkit-app-region: no-drag;
+}
+
+.alarm-trigger-btn:hover {
+  transform: translateY(-1px);
+}
+
+.alarm-trigger-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Fire button — orange-red */
+.alarm-trigger-btn--fire {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(194, 65, 12, 0.1) 100%);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+.alarm-trigger-btn--fire:hover {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25) 0%, rgba(194, 65, 12, 0.18) 100%);
+  border-color: rgba(249, 115, 22, 0.55);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+/* Animal button — amber */
+.alarm-trigger-btn--animal {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(180, 83, 9, 0.08) 100%);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+.alarm-trigger-btn--animal:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(180, 83, 9, 0.15) 100%);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.18);
+}
+
+/* Customer button — blue */
+.alarm-trigger-btn--customer {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(29, 78, 216, 0.08) 100%);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+.alarm-trigger-btn--customer:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(29, 78, 216, 0.15) 100%);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.18);
+}
+
+.alarm-trigger-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alarm-trigger-icon--fire {
+  background: rgba(249, 115, 22, 0.2);
+  color: #fdba74;
+}
+
+.alarm-trigger-icon--animal {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
+}
+
+.alarm-trigger-icon--customer {
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+}
+
+.alarm-trigger-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.alarm-trigger-name {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.alarm-trigger-btn--fire .alarm-trigger-name { color: #fdba74; }
+.alarm-trigger-btn--animal .alarm-trigger-name { color: #fcd34d; }
+.alarm-trigger-btn--customer .alarm-trigger-name { color: #93c5fd; }
+
+.alarm-trigger-desc {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.alarm-trigger-severity {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.severity-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.severity-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.severity-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.3;
+}
+
+.severity-dot--filled {
+  opacity: 1;
+}
+
+.alarm-trigger-btn--fire .severity-dot--filled { background: #f97316; }
+.alarm-trigger-btn--animal .severity-dot--filled { background: #f59e0b; }
+.alarm-trigger-btn--customer .severity-dot--filled { background: #3b82f6; }
+
+/* Button press ripple */
+.alarm-trigger-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  animation: ripple 0.5s ease-out forwards;
+}
+
+.alarm-trigger-btn--fire .ripple { background: rgba(249, 115, 22, 0.35); }
+.alarm-trigger-btn--animal .ripple { background: rgba(245, 158, 11, 0.35); }
+.alarm-trigger-btn--customer .ripple { background: rgba(59, 130, 246, 0.35); }
+
+/* --- Alarms Panel (right side) --- */
+
+.alarms-panel {
+  padding: var(--space-6) var(--space-8);
+  overflow-y: auto;
+  height: calc(100vh - 57px);
+  background: var(--bg-base);
+}
+
+.alarms-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.alarms-panel-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.alarms-panel-title h2 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.alarms-panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.online-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+.alarm-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.alarm-count--active {
+  background: var(--color-active-bg);
+  color: var(--color-active);
+  border: 1px solid var(--color-active-border);
+}
+
+.alarm-count--zero {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border-default);
+}
+
+/* --- Alarm Cards --- */
+
+.alarm-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alarm-card {
+  display: grid;
+  grid-template-columns: 4px 1fr;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: slide-in 0.3s ease-out;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.alarm-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.alarm-card-stripe {
+  width: 4px;
+  align-self: stretch;
+}
+
+.alarm-card--active .alarm-card-stripe {
+  background: var(--color-active);
+  animation: pulse-active 2s ease-in-out infinite;
+}
+
+.alarm-card--active {
+  border-color: var(--color-active-border);
+  box-shadow: var(--shadow-glow-red);
+}
+
+.alarm-card--acknowledged .alarm-card-stripe {
+  background: var(--color-acknowledged);
+}
+
+.alarm-card--acknowledged {
+  border-color: var(--color-acknowledged-border);
+}
+
+.alarm-card--closed .alarm-card-stripe {
+  background: var(--color-closed);
+}
+
+.alarm-card--closed {
+  opacity: 0.6;
+}
+
+.alarm-card-body {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alarm-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.alarm-card-top-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.alarm-card-type {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.alarm-type-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alarm-type-dot--fire { background: var(--color-fire); }
+.alarm-type-dot--animal { background: var(--color-animal); }
+.alarm-type-dot--customer { background: var(--color-customer); }
+
+.alarm-type-dot--active {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.alarm-type-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.alarm-card--active .alarm-type-name { color: var(--text-primary); }
+.alarm-card--acknowledged .alarm-type-name { color: var(--color-acknowledged); }
+.alarm-card--closed .alarm-type-name { color: var(--text-muted); }
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-badge--active {
+  background: var(--color-active-bg);
+  color: var(--color-active);
+  border: 1px solid var(--color-active-border);
+}
+
+.status-badge--acknowledged {
+  background: var(--color-acknowledged-bg);
+  color: var(--color-acknowledged);
+  border: 1px solid var(--color-acknowledged-border);
+}
+
+.status-badge--closed {
+  background: var(--color-closed-bg);
+  color: var(--color-closed);
+  border: 1px solid var(--color-closed-border);
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.status-badge--active .status-dot {
+  background: var(--color-active);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.status-badge--acknowledged .status-dot { background: var(--color-acknowledged); }
+.status-badge--closed .status-dot { background: var(--color-closed); }
+
+/* Acknowledge button (shown to non-senders who haven't acked) */
+.alarm-ack-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-3);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-full);
+  color: #22c55e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base), transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.alarm-ack-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.alarm-ack-btn:hover {
+  background: rgba(34, 197, 94, 0.22);
+  border-color: rgba(34, 197, 94, 0.55);
+  transform: translateY(-1px);
+}
+
+.alarm-ack-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* "Already confirmed" indicator for self */
+.alarm-self-acked {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #22c55e;
+  opacity: 0.7;
+}
+
+.alarm-self-acked svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Acknowledgment roster section */
+.alarm-ack-section {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.alarm-ack-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.alarm-ack-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.alarm-ack-chips {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.ack-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ack-chip svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.ack-chip--confirmed {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.ack-chip--pending {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border-default);
+}
+
+/* Card metadata row */
+.alarm-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.alarm-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.alarm-meta-item svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.alarm-meta-item--time {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.alarm-card--active .alarm-meta-item--time {
+  color: var(--color-active);
+}
+
+.meta-separator {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* --- Empty State --- */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-8);
   text-align: center;
+  animation: fade-in 0.5s ease-out;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-5);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.empty-state-icon svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-muted);
+}
+
+.empty-state-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* --- Responsive: smaller screens --- */
+
+@media (max-width: 900px) {
+  .main-content {
+    grid-template-columns: 1fr;
   }
-  to {
-    transform: rotate(360deg);
+
+  .triggers-panel {
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-default);
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .alarm-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .alarm-trigger-btn {
+    flex: 1;
+    min-width: 200px;
+  }
 
-.read-the-docs {
-  color: #888;
+  .alarms-panel {
+    height: auto;
+    min-height: 400px;
+  }
+
+  .header-user-room {
+    display: none;
+  }
 }

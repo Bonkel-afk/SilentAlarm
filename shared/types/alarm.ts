@@ -10,5 +10,5 @@ export interface Alarm {
   roomId: string
   status: AlarmStatus
   createdAt: string
-  acknowledgedBy?: string
+  acknowledgedBy: string[]
 }

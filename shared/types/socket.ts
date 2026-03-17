@@ -3,6 +3,8 @@ import type { Alarm } from "./alarm"
 export interface ServerToClientEvents {
   "alarm:new": (alarm: Alarm) => void
   "alarm:update": (alarm: Alarm) => void
+  "alarm:sync": (alarms: Alarm[]) => void
+  "user:list": (usernames: string[]) => void
 }
 
 export interface ClientToServerEvents {
@@ -11,6 +13,6 @@ export interface ClientToServerEvents {
     userId: string
     roomId: string
   }) => void
-
   "alarm:ack": (alarmId: string) => void
+  "user:join": (username: string) => void
 }

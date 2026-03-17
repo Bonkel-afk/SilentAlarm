@@ -1,0 +1,1 @@
+- [project_silentalarm.md](project_silentalarm.md) - SilentAlarm vet clinic alarm dashboard: design tokens, layout, tech stack decisions
