@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react"
 import { socket } from "../socket"
 import type { Alarm } from "../../../shared/types/alarm"
 import { AlarmCard } from "./AlarmCard"
+import { playAlarmSound } from "../alarm-sound"
 
 const ShieldIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -29,6 +30,14 @@ export const AlarmList: React.FC = () => {
     }
     const onNew = (alarm: Alarm) => {
       setAlarms(prev => [alarm, ...prev])
+      playAlarmSound()
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { ipcRenderer } = (window as any).require("electron")
+        ipcRenderer.send("alarm:trigger")
+      } catch {
+        // läuft im Browser (kein Electron) — ignorieren
+      }
     }
     const onUpdate = (updated: Alarm) => {
       setAlarms(prev => prev.map(a => a.id === updated.id ? updated : a))

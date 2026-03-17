@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 
 const isDev = process.env.NODE_ENV === "development"
@@ -21,6 +21,18 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, "client/dist/index.html"))
   }
+
+  ipcMain.on("alarm:trigger", () => {
+    if (win.isMinimized()) win.restore()
+    win.setAlwaysOnTop(true)
+    win.show()
+    win.focus()
+    win.flashFrame(true)
+    setTimeout(() => {
+      win.setAlwaysOnTop(false)
+      win.flashFrame(false)
+    }, 5000)
+  })
 }
 
 app.whenReady().then(createWindow)

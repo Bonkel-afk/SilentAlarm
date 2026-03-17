@@ -1,0 +1,8 @@
+node_modules/
+client/
+server/node_modules/
+release/
+.git/
+.vscode/
+*.md
+shell.nix

@@ -9,7 +9,9 @@
     "build": "npm run build --prefix client",
     "start": "electron .",
     "server": "npm run start --prefix server",
-    "dist": "npm run build && electron-builder"
+    "dist": "npm run build && electron-builder",
+    "dist:win": "cross-env NODE_ENV=production npm run build --prefix client && electron-builder --win",
+    "dist:linux": "cross-env NODE_ENV=production npm run build --prefix client && electron-builder --linux"
   },
   "build": {
     "appId": "com.silentuncle.app",
